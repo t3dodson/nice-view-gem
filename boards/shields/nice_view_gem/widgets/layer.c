@@ -23,6 +23,22 @@ void trim_layer_suffix(char *str) {
     }
 }
 
+// returns 1 if str starts with prefix, 0 otherwise
+int startswith(const char *str, const char *prefix) {
+    if (str == NULL || prefix == NULL) {
+        return 0;
+    }
+    size_t prefix_len = strlen(prefix);
+    size_t str_len = strlen(str);
+    
+    if (str_len < prefix_len) {
+        return 0;
+    }
+    
+    return strncmp(str, prefix, prefix_len) == 0;
+}
+
+
 
 void draw_layer_status(lv_obj_t *canvas, const struct status_state *state) {
     lv_draw_label_dsc_t label_dsc;
@@ -38,5 +54,12 @@ void draw_layer_status(lv_obj_t *canvas, const struct status_state *state) {
         to_uppercase(text);
     }
 
-    lv_canvas_draw_text(canvas, 0, 146 + BUFFER_OFFSET_BOTTOM, 68, &label_dsc, text);
+    //lv_canvas_draw_text(canvas, 0, 146 + BUFFER_OFFSET_BOTTOM, 68, &label_dsc, text);
+
+    if (startswith(text, "editor")) {
+        lv_draw_rect_dsc_t rect_white_dsc;
+        init_rect_dsc(&rect_white_dsc, LVGL_FOREGROUND);
+
+        lv_canvas_draw_rect(canvas, 0, 0, 68, 160, &rect_white_dsc);
+    }
 }
