@@ -24,6 +24,11 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include "profile.h"
 #include "screen.h"
 #include "wpm.h"
+#include "../assets/custom_fonts.h"
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
 
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 
@@ -54,6 +59,38 @@ static void draw_middle(lv_obj_t *widget, lv_color_t cbuf[], const struct status
     rotate_canvas(canvas, cbuf);
 }
 
+void to_lower(char *str) {
+    for (int i = 0; str[i] != '\0'; i++) {
+        str[i] = tolower(str[i]);
+    }
+}
+
+// returns 1 if str starts with prefix, 0 otherwise
+int startswith(const char *str, const char *prefix) {
+    if (str == NULL || prefix == NULL) {
+        return 0;
+    }
+    size_t prefix_len = strlen(prefix);
+    size_t str_len = strlen(str);
+    
+    if (str_len < prefix_len) {
+        return 0;
+    }
+    
+    return strncmp(str, prefix, prefix_len) == 0;
+}
+
+static void draw_profile_meta(lv_obj_t *canvas, const struct status_state *state) {
+    lv_draw_rect_dsc_t rect_white_dsc;
+    init_rect_dsc(&rect_white_dsc, LVGL_BACKGROUND);
+
+    lv_canvas_draw_rect(canvas, 0, 0, 68, 160, &rect_white_dsc);
+
+    lv_draw_label_dsc_t label_left_dsc;
+    init_label_dsc(&label_left_dsc, LVGL_FOREGROUND, &pixel_operator_mono, LV_TEXT_ALIGN_LEFT);
+    lv_canvas_draw_text(canvas, 0, 0, 68, &label_left_dsc, "a:pc\ns:phone\nd:ipad\nf:workm\ng:workp\n");
+}
+
 static void draw_bottom(lv_obj_t *widget, lv_color_t cbuf[], const struct status_state *state) {
     lv_obj_t *canvas = lv_obj_get_child(widget, 2);
     fill_background(canvas);
@@ -61,6 +98,19 @@ static void draw_bottom(lv_obj_t *widget, lv_color_t cbuf[], const struct status
     // Draw widgets
     draw_profile_status(canvas, state);
     draw_layer_status(canvas, state);
+    char text[10] = {};
+
+    if (state->layer_label == NULL) {
+        sprintf(text, "Layer %i", state->layer_index);
+    } else {
+        strncpy(text, state->layer_label, 9);
+        to_lower(text);
+    }
+
+    if (startswith(text, "system")) {
+        draw_profile_meta(lv_obj_get_child(widget, 1), state);
+        
+    }
 
     // Rotate for horizontal display
     rotate_canvas(canvas, cbuf);
