@@ -33,7 +33,8 @@ void draw_layer_status(lv_obj_t *canvas, const struct status_state *state) {
     if (state->layer_label == NULL) {
         sprintf(text, "Layer %i", state->layer_index);
     } else {
-        strncpy(text, trim_layer_suffix(state->layer_label), 9);
+        strncpy(text, state->layer_label, 9);
+        trim_layer_suffix(text);
         to_uppercase(text);
     }
 
