@@ -1,6 +1,6 @@
 # nice-view-gem
 
-![Preview](https://github.com/m165437/nice-view-gem/blob/main/.github/assets/preview.jpg?raw=true)
+![Preview](https://github.com/t3dodson/nice-view-gem/blob/main/.github/assets/preview.jpg?raw=true)
 
 ### A sleek customization for the nice!view shield
 
@@ -21,15 +21,15 @@ manifest:
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
-    - name: m165437 #new entry
-      url-base: https://github.com/M165437 #new entry
+    - name: t3dodson #new entry
+      url-base: https://github.com/t3dodson #new entry
   projects:
     - name: zmk
       remote: zmkfirmware
       revision: main
       import: app/west.yml
     - name: nice-view-gem #new entry
-      remote: m165437 #new entry
+      remote: t3dodson #new entry
       revision: main #new entry
   self:
     path: config
