@@ -2,7 +2,7 @@
 
 The nice!view is a low-power, high refresh rate display meant to replace I2C OLEDs traditionally used.
 
-This shield requires that an `&nice_view_spi` labeled SPI bus is provided with _at least_ MOSI, SCK, and CS pins defined.
+This shield requires that a `&pro_micro_spi` labeled SPI bus is provided with _at least_ MOSI, SCK, and CS pins defined (this is exposed natively by boards using the Arduino Pro Micro footprint, such as nice!nano).
 
 160x68
 
