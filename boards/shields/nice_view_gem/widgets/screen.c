@@ -19,6 +19,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include <zmk/wpm.h>
 
 #include "battery.h"
+#include "dynamic_nkro.h"
 #include "layer.h"
 #include "output.h"
 #include "profile.h"
@@ -43,6 +44,7 @@ static void draw_top(lv_obj_t *widget, const struct status_state *state) {
     // Draw widgets
     draw_output_status(canvas, state);
     draw_battery_status(canvas, state);
+    draw_dynamic_nkro_status(canvas, state);
 
     // Rotate for horizontal display
     rotate_canvas(canvas);
@@ -88,7 +90,8 @@ static void draw_profile_meta(lv_obj_t *canvas, const struct status_state *state
 
     lv_draw_label_dsc_t label_left_dsc;
     init_label_dsc(&label_left_dsc, LVGL_FOREGROUND, &pixel_operator_mono, LV_TEXT_ALIGN_LEFT);
-    canvas_draw_text(canvas, 0, 0, 68, &label_left_dsc, "a:pc\ns:phone\nd:ipad\nf:workm\ng:workp\n");
+    canvas_draw_text(canvas, 0, 0, 68, &label_left_dsc,
+                     "a:pc\ns:phone\nd:ipad\nf:workm\ng:workp\n");
 }
 
 static void draw_bottom(lv_obj_t *widget, const struct status_state *state) {
@@ -109,7 +112,6 @@ static void draw_bottom(lv_obj_t *widget, const struct status_state *state) {
 
     if (startswith(text, "system")) {
         draw_profile_meta(lv_obj_get_child(widget, 1), state);
-        
     }
 
     // Rotate for horizontal display
